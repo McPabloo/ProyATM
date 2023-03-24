@@ -15,6 +15,11 @@ class test extends TestCase{
         $this -> assertEquals(1,$this->op->guardar(1234,"Karla",5000));
     }
 
+    public function testb(){
+        $i1 = 1;
+        $this -> assertEquals(1,$this->op->guardar(1234,"Karla",5000));
+    }
+
     public function testfiltro(){
         $i1 = 1;
         $this -> assertEquals(1,$this->op->mostrar());
