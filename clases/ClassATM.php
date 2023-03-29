@@ -69,17 +69,112 @@ class Factura {
 
       if ($conn->query($sql) === TRUE) {
         echo "New record created successfully";
-        return 1;
+        return true;
       } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
-        return 0;
+        return false;
       }
        $conn -> close();
     }
 
-    public function guardar1(){
-        guardar($pin,$nom,$monto);
+    public function ValidarPin($pin,$nombre){
+      $servername = "db4free.net";
+      $username = "pablo1";
+      $password = "Nsuns4xd";
+      $dbname = "sisop2";
+  
+      // Create connection
+      $conn = new mysqli($servername, $username, $password, $dbname);
+      // Check connection
+      if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+      }
+
+        $name1 = $nombre;
+        $pin1 = $pin;
+
+        //Mostrar las facturas filtradas
+      $sql1 = "SELECT nombre FROM InvoiceDao where nombre = '$name1' and pin = '$pin1'";
+      $monto = "SELECT * FROM InvoiceDao where nombre = '$name1' and pin = '$pin1'";
+      
+      $result = $conn->query($sql1);
+      $monto1 = $conn->query($monto);
+    
+      if ($monto1->num_rows > 0) {
+        //output data of each row
+        while($row = $monto1->fetch_assoc()) {
+          $montof = $row["monto"];
+        }
+      }
+
+      if ($result->num_rows > 0) {
+        /* output data of each row
+        while($row = $result->fetch_assoc()) {
+          //echo "<br> id: ". $row["id"]. " - Nombre: ". $row["nombre"]. " " . $row["monto"] . "<br>";
         return 1;
+        }¨*/
+        return true;
+      }
+      $conn->close();
+      return false;
+    }
+
+    public function transferenciar($nom,$cant,$usu){
+        $servername = "db4free.net";
+        $username = "pablo1";
+        $password = "Nsuns4xd";
+        $dbname = "sisop2";
+
+        $i1 = $cant;
+        $i2 = $nom;
+        $i3 = $usu;
+      
+          // Create connection
+          $conn = new mysqli($servername, $username, $password, $dbname);
+          // Check connection
+          if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+          }
+    
+          //if(validarPin($pin,$nombre)){
+            //Obtiene el monto del usuario logeado
+            $monto = "SELECT * FROM InvoiceDao where nombre = '$i2'";
+            $monto1 = $conn->query($monto);
+            //obtiene el monto del usuario de transferencia
+            $montot = "SELECT * FROM InvoiceDao where nombre = '$i3'";
+            $montot1 = $conn->query($montot);
+            if ($monto1->num_rows > 0) {
+                //output data of each row
+                while($row = $monto1->fetch_assoc()) {
+                $montof = $row["monto"];
+                }
+            }
+            if ($montot1->num_rows > 0) {
+                //output data of each row
+                while($row = $montot1->fetch_assoc()) {
+                $montof1 = $row["monto"];
+                }
+            }
+
+            if ($i1 > 0){
+                $montof = $montof - $i1;
+                $queryUp = "UPDATE InvoiceDao set monto = '$montof' where nombre = '$i2'";
+                $updateMonto = $conn->query($queryUp);
+                $montof1 = $montof1 + $i1;
+                $queryUp1 = "UPDATE InvoiceDao set monto = '$montof1' where nombre = '$i3'";
+                $updateMonto = $conn->query($queryUp1);
+                //echo "Retiro Exitoso! Puedes tomar tu tarjeta";
+                return true;
+                //include 'Login.php';
+            }else{
+                //echo "La cantidad ingresada debe ser mayor a 0";
+                //include 'atm.php';
+                return false;
+            }
+        $conn -> close();
+        return false;
+         // }
+         // return false;
     }
 
     public function mostrar(){
