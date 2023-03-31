@@ -31,6 +31,16 @@ if(array_key_exists('transferenciat', $_POST)) {
             $name11 = $_POST['deposito'];
             $name1 = $_POST['Key'];
 
+            //Obtiene el monto total del atm
+            $monto2 = "SELECT * FROM atm";
+            $monto22 = $conn->query($monto2);
+            if ($monto22->num_rows > 0) {
+                //output data of each row
+                while($row = $monto22->fetch_assoc()) {
+                $montof2 = $row["total"];
+                }
+            }
+
             //Obtiene el monto del usuario logeado
             $monto = "SELECT * FROM InvoiceDao where nombre = '$name1'";
             $monto1 = $conn->query($monto);
@@ -42,11 +52,14 @@ if(array_key_exists('transferenciat', $_POST)) {
             }
 
             if ($name11 > 0){
+                $montof2 = $montof2 + $name11;
                 $montof = $montof + $name11;
                 $queryUp = "UPDATE InvoiceDao set monto = '$montof' where nombre = '$name1'";
                 $updateMonto = $conn->query($queryUp);
+                $queryUp2 = "UPDATE atm set total = '$montof2' where id = '1' ";
+                $updateMonto2 = $conn->query($queryUp2);
                 //echo "Retiro Exitoso! Puedes tomar tu tarjeta";
-                include 'Login.php';
+                include 'atm.php';
             }else{
                 echo "La cantidad ingresada debe ser mayor a 0";
                 include 'atm.php';
@@ -128,6 +141,16 @@ if(array_key_exists('transferenciat', $_POST)) {
                 $name11 = $_POST['retiro'];
                 $name1 = $_POST['Key'];
     
+                //Obtiene el monto total del atm
+                $monto2 = "SELECT * FROM atm";
+                $monto22 = $conn->query($monto2);
+                if ($monto22->num_rows > 0) {
+                    //output data of each row
+                    while($row = $monto22->fetch_assoc()) {
+                    $montof2 = $row["total"];
+                    }
+                }
+
                 //Obtiene el monto del usuario logeado
                 $monto = "SELECT * FROM InvoiceDao where nombre = '$name1'";
                 $monto1 = $conn->query($monto);
@@ -138,17 +161,21 @@ if(array_key_exists('transferenciat', $_POST)) {
                     }
                 }
     
-                if ($montof > 0){
+                if ($montof2 > 0){
+                    
                     if ($name11 % 100 == 0){
-                        if ($name11 <= $montof){
+                        if ($name11 <= $montof && $name11 <= $montof2){
+                            $montof2 = $montof2 - $name11;
                             $montof = $montof - $name11;
                             $queryUp = "UPDATE InvoiceDao set monto = '$montof' where nombre = '$name1'";
+                            $queryUp2 = "UPDATE atm set total = '$montof2' where  id = '1'";
                             $updateMonto = $conn->query($queryUp);
+                            $updateMonto2 = $conn->query($queryUp2);
                             //echo "Retiro Exitoso! Puedes tomar tu tarjeta";
                             echo $name1;
-                            include 'Login.php';
+                            include 'atm.php';
                         }else{
-                            echo "La cantidad ingresada supera los fondos";
+                            echo "La cantidad ingresada supera los fondos del atm";
                             include 'atm.php';
                         }
                     }else{
