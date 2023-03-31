@@ -119,6 +119,58 @@ class Factura {
       return false;
     }
 
+    public function retiro($nom, $mont){
+        $servername = "db4free.net";
+        $username = "pablo1";
+        $password = "Nsuns4xd";
+        $dbname = "sisop2";
+
+        $i1 = $nom;
+        $i2 = $mont;
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+        }
+
+        //monto del cajero
+        $monto2 = "SELECT * FROM atm";
+        $monto22 = $conn->query($monto2);
+        if ($monto22->num_rows > 0) {
+            //output data of each row
+            while($row = $monto22->fetch_assoc()) {
+            $montof2 = $row["total"];
+            }
+        }
+
+        //monto del usuario
+        $monto = "SELECT * FROM InvoiceDao where nombre = '$i1'";
+                $monto1 = $conn->query($monto);
+                if ($monto1->num_rows > 0) {
+                    //output data of each row
+                    while($row = $monto1->fetch_assoc()) {
+                    $montof = $row["monto"];
+                    }
+                }
+
+      if ($i2 > 0 && $i2 <= $montof2 && $i2 <= $montof){
+        $montof = $montof - $i2;
+        $montof2 = $montof2 - $i2;
+        $queryUp = "UPDATE InvoiceDao set monto = '$montof' where nombre = '$i1'";
+        $queryUp2 = "UPDATE atm set total = '$montof2' where  id = '1'";
+        $updateMonto = $conn->query($queryUp);
+        $updateMonto2 = $conn->query($queryUp2);
+        return true;
+      }else{
+        return false;
+      }
+
+      $conn -> close();
+
+    }
+
     public function transferenciar($nom,$cant,$usu){
         $servername = "db4free.net";
         $username = "pablo1";

@@ -23,6 +23,22 @@ class test extends TestCase{
         $this -> assertEquals(true,$this->op->guardar(16,"Yessica",5200));
     }
 
+
+    //test retiro
+    public function testRetiro(){
+        $i1 = true;
+        $this -> assertEquals(true,$this->op->retiro("Brayan",300));
+    }
+
+    //mock retiro
+    public function testMockRetiro(){
+        $data = $this->getMockBuilder(Factura::class)->getMock();
+        $data->method('ValidarPin')->will($this->returnValue(true));
+
+        $this->assertEquals(true, $data->retiro("Brayan", 200));
+    }
+
+
     //mock transferencia
     public function testMockTransferencia(){
         $data = $this->getMockBuilder(Factura::class)->getMock();
