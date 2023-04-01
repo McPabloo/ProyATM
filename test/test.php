@@ -10,19 +10,17 @@ class test extends TestCase{
         $this -> op = new Factura();
     }
 
-    // mock depósito
-    public function testMockDeposito(){
-        $data = $this->getMockBuilder(Factura::class)->getMock();
-    
-        $this->assertEquals(true,$data->guardar(123123,"Prueba",1000));
-    }
-
-    //test depósito
-    public function testDeposito(){
+    //test guardar
+    public function testGuardar(){
         $i1 = true;
         $this -> assertEquals(true,$this->op->guardar(16,"Yessica",5200));
     }
 
+    //test Deposito
+    public function testDeposito(){
+        $i1 = true;
+        $this -> assertEquals(true,$this->op->depositar("Pablo",500));
+    }
 
     //test retiro
     public function testRetiro(){
@@ -30,6 +28,21 @@ class test extends TestCase{
         $this -> assertEquals(true,$this->op->retiro("Brayan",300));
     }
 
+    //test transferencia
+    public function testTransferencia(){
+        $esperado = true;
+    
+        $this->assertEquals(true,$this->op->transferenciar("Pablo",100,"Brayan"));
+    }
+
+
+    //mock Deposito
+    public function testMockDeposito(){
+        $data = $this->getMockBuilder(Factura::class)->getMock();
+        $data->method('ValidarPin')->will($this->returnValue(true));
+
+        $this->assertEquals(true, $data->depositar("Brayan", 200));
+    }
     //mock retiro
     public function testMockRetiro(){
         $data = $this->getMockBuilder(Factura::class)->getMock();
@@ -37,7 +50,6 @@ class test extends TestCase{
 
         $this->assertEquals(true, $data->retiro("Brayan", 200));
     }
-
 
     //mock transferencia
     public function testMockTransferencia(){
@@ -47,11 +59,11 @@ class test extends TestCase{
         $this->assertEquals(true,$data->transferenciar("Pablo",1000,"Brayan"));
     }
 
-    //test transferencia
-    public function testTransferencia(){
-        $esperado = true;
+    // mock guardar
+    public function testMockGuardar(){
+        $data = $this->getMockBuilder(Factura::class)->getMock();
     
-        $this->assertEquals(true,$this->op->transferenciar("Pablo",100,"Brayan"));
+        $this->assertEquals(true,$data->guardar(123123,"Prueba",1000));
     }
 
     public function testfiltro(){
