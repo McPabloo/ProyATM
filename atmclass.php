@@ -175,7 +175,7 @@ if(array_key_exists('transferenciat', $_POST)) {
                             echo $name1;
                             include 'atm.php';
                         }else{
-                            echo "La cantidad ingresada supera los fondos del atm";
+                            echo "La cantidad ingresada supera los fondos del atm o de su cuenta";
                             include 'atm.php';
                         }
                     }else{
