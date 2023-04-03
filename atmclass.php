@@ -114,7 +114,7 @@ if(array_key_exists('transferenciat', $_POST)) {
                     $queryUp1 = "UPDATE InvoiceDao set monto = '$montof1' where nombre = '$usuario'";
                     $updateMonto = $conn->query($queryUp1);
                     //echo "Retiro Exitoso! Puedes tomar tu tarjeta";
-                    include 'Login.php';
+                    include 'atm.php';
                 }else{
                     echo "La cantidad ingresada debe ser mayor a 0";
                     include 'atm.php';
